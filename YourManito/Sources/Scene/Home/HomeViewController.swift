@@ -6,14 +6,29 @@
 //
 
 import UIKit
+import SnapKit
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
+    
+    private let testLabel: YourManitoLabel = .init(font: .font(.heading_1), color: .black)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        setStyle()
+        setLayout()
     }
-
-
+    
+    private func setStyle() {
+        self.view.backgroundColor = .white
+        testLabel.text = "너마니또"
+    }
+    
+    private func setLayout() {
+        self.view.addSubview(testLabel)
+        testLabel.snp.makeConstraints{
+            $0.leading.equalToSuperview().inset(32)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(27)
+        }
+    }
 }
 
