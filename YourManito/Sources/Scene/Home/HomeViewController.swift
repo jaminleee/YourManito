@@ -11,8 +11,6 @@ import SnapKit
 final class HomeViewController: UIViewController {
     static let identifier: String = "HomeViewController"
     
-    
-    private let testLabel: YourManitoLabel = .init(font: .font(.heading_1), color: .black)
     private let logoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "smallLogo")
@@ -51,31 +49,43 @@ final class HomeViewController: UIViewController {
         return stackView
     }()
     
+    private let roomListView: UIView = {
+       let view = UIView()
+        view.backgroundColor = .gray4
+        return view
+    }()
+    
+    private let roomListLabel: YourManitoLabel = .init(font: .font(.heading_3), color: .main_black)
+    
     private let roomCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .gray4
+        collectionView.backgroundColor = .clear
         
         return collectionView
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        roomCollectionView.delegate = self
+        roomCollectionView.dataSource = self
         setStyle()
         setLayout()
+        setCollectionViewLayout()
+        setCollectionViewConfig()
     }
     
     private func setStyle() {
         self.view.backgroundColor = .white
-        testLabel.text = "너마니또"
+        roomListLabel.text = "나만의 마니또"
     }
     
     
     private func setLayout() {
-        self.view.addSubviews(logoImageView, roomStackView, roomCollectionView)
+        self.view.addSubviews(logoImageView, roomStackView, roomListView, roomListLabel, roomCollectionView)
         
         logoImageView.snp.makeConstraints{
             $0.leading.equalToSuperview().inset(32)
@@ -96,8 +106,18 @@ final class HomeViewController: UIViewController {
             $0.height.equalTo((UIScreen.main.bounds.width-24) / 164 * 65)
         }
         
-        roomCollectionView.snp.makeConstraints {
+        roomListView.snp.makeConstraints {
             $0.top.equalTo(roomStackView.snp.bottom).offset(28)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
+        
+        roomListLabel.snp.makeConstraints {
+            $0.top.equalTo(roomListView.snp.top).offset(44)
+            $0.leading.equalToSuperview().inset(32)
+        }
+        
+        roomCollectionView.snp.makeConstraints {
+            $0.top.equalTo(roomListLabel.snp.bottom).offset(28)
             $0.leading.trailing.bottom.equalToSuperview()
         }
         
@@ -114,3 +134,24 @@ final class HomeViewController: UIViewController {
     }
 }
 
+extension HomeViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RoomCollectionViewCell.identifier, for: indexPath) as? RoomCollectionViewCell
+        else {
+            print("없슈")
+            return UICollectionViewCell()
+        }
+        return cell
+    }
+}
+
+extension HomeViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: (UIScreen.main.bounds.width)-32, height: 100)
+    }
+}
