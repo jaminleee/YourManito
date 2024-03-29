@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ED7F37322BB67F6C00D32683 /* RoomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7F37312BB67F6C00D32683 /* RoomCollectionViewCell.swift */; };
 		EDC634E92B9F4AC6007AD641 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EDC634E82B9F4AC6007AD641 /* SnapKit */; };
 		EDC634EB2B9F4AC6007AD641 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = EDC634EA2B9F4AC6007AD641 /* SnapKit-Dynamic */; };
 		EDC634ED2B9FE42C007AD641 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC634EC2B9FE42C007AD641 /* UIFont+.swift */; };
@@ -33,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		ED7F37312BB67F6C00D32683 /* RoomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCollectionViewCell.swift; sourceTree = "<group>"; };
 		EDC634EC2B9FE42C007AD641 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		EDC634EE2B9FE437007AD641 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		EDC634F02B9FE44B007AD641 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				EDE2077C2B8CE36D00B57CCF /* HomeViewController.swift */,
+				ED7F37312BB67F6C00D32683 /* RoomCollectionViewCell.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EDE2079B2B9105A300B57CCF /* LoginViewController.swift in Sources */,
+				ED7F37322BB67F6C00D32683 /* RoomCollectionViewCell.swift in Sources */,
 				EDC6350A2B9FFAF8007AD641 /* YourManitoLabel.swift in Sources */,
 				EDE2077D2B8CE36D00B57CCF /* HomeViewController.swift in Sources */,
 				EDC634F12B9FE44B007AD641 /* UIView+.swift in Sources */,
