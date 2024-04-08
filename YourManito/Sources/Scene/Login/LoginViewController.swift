@@ -18,52 +18,30 @@ final class LoginViewController: UIViewController {
     private let nicknameLabel: YourManitoLabel = .init(font: .font(.subtitle_1), color: .gray1)
     private let nicknameTextField: UITextField = {
         let textField = UITextField()
-        
         textField.layer.cornerRadius = 16
         textField.layer.borderColor = UIColor.gray3.cgColor
         textField.layer.borderWidth = 2
         textField.layer.backgroundColor = UIColor.gray4.cgColor
-        textField.addTarget(self, action: #selector(textFieldDidBeginEditing(_:)), for: .editingDidBegin)
-        textField.addTarget(self, action: #selector(textFieldDidEndEditing(_:)), for: .editingDidEnd)
+//        textField.addTarget(self, action: #selector(textFieldDidBeginEditing(_:)), for: .editingDidBegin)
+//        textField.addTarget(self, action: #selector(textFieldDidEndEditing(_:)), for: .editingDidEnd)
         textField.setPlaceholder(placeholder: "한글, 영문 2자 이상", fontColor: .gray2, font: .font(.heading_6))
         textField.setLeftPaddingPoints(20)
         textField.setRightPaddingPoints(20)
         //textField.font = .font(.heading_5)
-        
-        
-        
         return textField
     }()
     
-    //키보드 내리기
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-            view.endEditing(true)
-        }
-    
-    // 텍스트 필드 선택시 border 색상 변경
-    @objc func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.layer.borderColor = selectedBorderColor
-    }
 
-    // 텍스트 필드 선택 해제시 border 색상 변경
-    @objc func textFieldDidEndEditing(_ textField: UITextField) {
-        textField.layer.borderColor = defaultBorderColor
-    }
-    private let confirmButton: UIButton = {
-        let button = UIButton()
-        button.makeCornerRound(radius: 24)
-        button.backgroundColor = .primary
-        button.setTitle("확인", for: .normal)
-        button.titleLabel?.font = .font(.heading_4)
-        button.setTitleColor(.main_white, for: .normal)
-        return button
-    }()
+    private let confirmButton: YourManitoButton = .init(title: "확인")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setStyle()
         setValue()
+        
+        nicknameTextField.addTarget(self, action: #selector(textFieldDidBeginEditing(_:)), for: .editingDidBegin)
+        nicknameTextField.addTarget(self, action: #selector(textFieldDidEndEditing(_:)), for: .editingDidEnd)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         // 키보드 사라짐을 감지하는 옵저버 등록
@@ -102,7 +80,20 @@ final class LoginViewController: UIViewController {
         }
         
     }
+    //키보드 내리기
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+            view.endEditing(true)
+        }
     
+    // 텍스트 필드 선택시 border 색상 변경
+    @objc func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.layer.borderColor = selectedBorderColor
+    }
+
+    // 텍스트 필드 선택 해제시 border 색상 변경
+    @objc func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.layer.borderColor = defaultBorderColor
+    }
     
     @objc private func keyboardWillShow(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
