@@ -81,6 +81,9 @@ final class HomeViewController: UIViewController {
     private func setStyle() {
         self.view.backgroundColor = .white
         roomListLabel.text = "나만의 마니또"
+        
+        makeRoomButton.addTarget(self, action: #selector(makeRoomButtonTapped), for: .touchUpInside)
+        //navigationController?.isNavigationBarHidden = true
     }
     
     
@@ -89,7 +92,7 @@ final class HomeViewController: UIViewController {
         
         logoImageView.snp.makeConstraints{
             $0.leading.equalToSuperview().inset(32)
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(27)
+            $0.top.equalToSuperview().inset(70)
             $0.height.equalTo(40)
             $0.width.equalTo(130)
         }
@@ -122,6 +125,12 @@ final class HomeViewController: UIViewController {
         }
         
     }
+    
+    @objc private func makeRoomButtonTapped() {
+        let makeRoomViewController = MakeRoomViewController()
+        navigationController?.pushViewController(makeRoomViewController, animated: true)
+    }
+
     
     private func setCollectionViewLayout(){
         let layout = UICollectionViewFlowLayout()
