@@ -10,6 +10,8 @@ import UIKit
 final class MakeRoomViewController: UIViewController {
     static let identifier: String = "MakeRoomViewController"
     
+    lazy var navigationVarView = YourManitoNavigationBarView(self)
+    
     let selectedBorderColor = UIColor.primary.cgColor
     let defaultBorderColor = UIColor.gray3.cgColor
     
@@ -81,6 +83,7 @@ final class MakeRoomViewController: UIViewController {
         roomNameTextField.addTarget(self, action: #selector(textFieldDidBeginEditing(_:)), for: .editingDidBegin)
         roomNameTextField.addTarget(self, action: #selector(changeFont(_:)), for: .valueChanged)
         roomNameTextField.addTarget(self, action: #selector(textFieldDidEndEditing(_:)), for: .editingDidEnd)
+        confirmButton.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)
         
         let endDatePicker = UIDatePicker()
         endDatePicker.datePickerMode = .date
@@ -96,6 +99,10 @@ final class MakeRoomViewController: UIViewController {
         endTimePicker.locale = Locale(identifier: "ko-KR")
         endTimePicker.addTarget(self, action: #selector(timeChange), for: .valueChanged)
         endTimeTextField.inputView = endTimePicker
+        
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.delegate = self
         
         
     }
@@ -113,10 +120,16 @@ final class MakeRoomViewController: UIViewController {
     }
     
     private func setLayout() {
-        self.view.addSubviews(makeRoomLabel, describeLabel, backgroundView, roomNameLabel, roomNamedescribeLabel, roomNameTextField, endDateLabel, endDatedescribeLabel, endDateTextField, endTimeTextField, confirmButton)
+        self.view.addSubviews(navigationVarView, makeRoomLabel, describeLabel, backgroundView, roomNameLabel, roomNamedescribeLabel, roomNameTextField, endDateLabel, endDatedescribeLabel, endDateTextField, endTimeTextField, confirmButton)
+        
+        navigationVarView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(26)
+            $0.trailing.leading.equalToSuperview()
+            $0.height.equalTo(40)
+        }
         
         makeRoomLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(107)
+            $0.top.equalTo(navigationVarView.snp.bottom).offset(41)
             $0.leading.equalToSuperview().inset(20)
         }
         
@@ -178,6 +191,11 @@ final class MakeRoomViewController: UIViewController {
         
     }
     
+    @objc private func confirmButtonTapped() {
+        let roomCompletionViewController = RoomCompletionViewController()
+        navigationController?.pushViewController(roomCompletionViewController, animated: true)
+    }
+    
     //키보드 내리기
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
             view.endEditing(true)
@@ -223,4 +241,31 @@ final class MakeRoomViewController: UIViewController {
         return formatter.string(from: date)
     }
 
+}
+
+extension MakeRoomViewController: UINavigationControllerDelegate {
+
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        navigationController.interactivePopGestureRecognizer?.isEnabled = navigationController.viewControllers.count > 1
+    }
+}
+
+extension MakeRoomViewController: UIGestureRecognizerDelegate {
+//    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+//        guard gestureRecognizer == interactivePopGestureRecognizer,
+//              let topVC = topViewController else {
+//            return true // default value
+//        }
+//        
+//        return viewControllers.count > 1 && duringTransition == false && isPopGestureEnable(topVC)
+//    }
+//    
+//    private func isPopGestureEnable(_ topVC: UIViewController) -> Bool {
+//        for vc in disabledPopVCs {
+//            if String(describing: type(of: topVC)) == String(describing: vc) {
+//                return false
+//            }
+//        }
+//        return true
+//    }
 }
