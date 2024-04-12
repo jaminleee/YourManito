@@ -52,6 +52,7 @@ final class LoginViewController: UIViewController {
         self.view.backgroundColor = .main_white
         loginLabel.text = "닉네임을 입력하세요"
         nicknameLabel.text = "닉네임"
+        
     }
     
     private func setValue() {
@@ -106,7 +107,7 @@ final class LoginViewController: UIViewController {
         
         UIView.animate(withDuration: animationDuration) {
             self.confirmButton.snp.updateConstraints {
-                $0.bottom.equalTo(self.view.safeAreaLayoutGuide).offset(-keyboardHeight - 20)
+                $0.bottom.equalTo(self.view.safeAreaLayoutGuide).offset(-keyboardHeight)
             }
             self.view.layoutIfNeeded()
         }
