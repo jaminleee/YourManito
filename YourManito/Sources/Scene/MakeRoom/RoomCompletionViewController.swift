@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import Toast
 
 final class RoomCompletionViewController: UIViewController {
     var daysLeft: Int = 0
