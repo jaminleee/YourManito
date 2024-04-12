@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SwiftEntryKit
 
 final class JoinRoomViewController: UIViewController {
     static let identifier: String = "JoinRoomViewController"
@@ -59,7 +58,11 @@ final class JoinRoomViewController: UIViewController {
         return collectionView
     }()
     
-
+//    private let deleteAlretView: YourManitoAlertView = {
+//       let view = YourManitoAlertView()
+//        view.configure(image: .copyGray, title: "삭제할겨?", subtitle: "누르면 삭제됨", cancelTitle: "아니오", confirmTitle: "삭제")
+//        return view
+//    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -153,80 +156,42 @@ final class JoinRoomViewController: UIViewController {
 
     
     @objc func presentBottomSheet() {
-        func presentBottomSheet(title: String, description: String, image: UIImage, buttonTitle: String, buttonAction: (() -> Void)?) {
-            
-            var attributes: EKAttributes = .bottomToast
-                attributes.roundCorners = .top(radius: 40)
-                attributes.displayDuration = .infinity
-                attributes.entryInteraction = .absorbTouches
-                attributes.screenInteraction = .absorbTouches
-            attributes.entryBackground = .color(color: .black)
-                
-                let titleLabel = EKProperty.LabelContent(
-                    text: title,
-                    style: EKProperty.LabelStyle(
-                        font: .systemFont(ofSize: 18, weight: .semibold),
-                        color: EKColor(.white),
-                        alignment: .center,
-                        numberOfLines: 1
-                    )
-                )
-
-                let descriptionLabel = EKProperty.LabelContent(
-                    text: description,
-                    style: EKProperty.LabelStyle(
-                        font: .systemFont(ofSize: 16, weight: .regular),
-                        color: EKColor(.white),
-                        alignment: .center,
-                        numberOfLines: 0
-                    )
-                )
-            
-            let image = EKProperty.ImageContent(
-                image: image,
-                size: CGSize(width: 32, height: 32),
-                tint: EKColor(.white),
-                contentMode: .scaleAspectFill
-            )
-            
-            let buttonLabel = EKProperty.LabelContent(
-                text: buttonTitle,
-                style: EKProperty.LabelStyle(
-                    font: .systemFont(ofSize: 16, weight: .semibold),
-                    color: .black,
-                    alignment: .center,
-                    numberOfLines: 1
-                )
-            )
-
-             let button = EKProperty.ButtonContent(
-                 label: buttonLabel,
-                 backgroundColor: .white,
-                 highlightedBackgroundColor: .white,
-                 contentEdgeInset: 8
-             )
-            
-            let popUpMessage = EKPopUpMessage(
-                themeImage: .init(image: image),
-                title: titleLabel,
-                description: descriptionLabel,
-                button: button) {
-                    buttonAction?()
-                    SwiftEntryKit.dismiss()
-                }
-
-            let entry = EKPopUpMessageView(with: popUpMessage)
-            SwiftEntryKit.display(entry: entry, using: attributes)
-            
+        let dimView = UIView()
+        dimView.backgroundColor = UIColor.main_black.withAlphaComponent(0.3)
+        dimView.tag = 1
+        
+        let alertView = YourManitoAlertView()
+        alertView.configure(image: .copyGray, title: "삭제할까요?", subtitle: "누르면 삭제됩니다", cancelTitle: "아니오", confirmTitle: "삭제")
+        self.view.addSubviews(dimView, alertView)
+        dimView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
-        presentBottomSheet(
-          title: "This is bottom sheet!",
-          description: "You've just created this awesome bottom sheet using SwiftEntryKit!\nLook at this fancy gradient! What a powerfull library!",
-          image: UIImage(systemName: "hand.thumbsup")!,
-          buttonTitle: "Got it") {
-              print("performing some action")
-          }
+        alertView.tag = 2
+        
+        alertView.transform = CGAffineTransform(translationX: 0, y: alertView.frame.height)
+        UIView.animate(withDuration: 3, animations: {
+            alertView.transform = .identity
+        })
+        
+        alertView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalToSuperview().multipliedBy(0.38)
+        }
+        
+
+        // Dismiss the alert when tapping outside the alert view
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissCustomAlert))
+        dimView.addGestureRecognizer(tapGesture)
     }
+
+    @objc private func dismissCustomAlert() {
+        let viewWithTag1 = self.view.viewWithTag(1)
+        let viewWithTag2 = self.view.viewWithTag(2)
+        
+        viewWithTag1?.removeFromSuperview()
+        viewWithTag2?.removeFromSuperview()
+    }
+    
     private func setCollectionViewLayout(){
         let layout = UICollectionViewFlowLayout()
         self.membersCollectionView.setCollectionViewLayout(layout, animated: false)
