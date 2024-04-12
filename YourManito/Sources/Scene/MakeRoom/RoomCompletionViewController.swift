@@ -11,6 +11,14 @@ import SnapKit
 final class RoomCompletionViewController: UIViewController {
     var daysLeft: Int = 0
     let roomCode: String = "roomdCode"
+    
+    private let popToRootViewButton: UIButton = {
+        let button = UIButton()
+        button.setImage(.xOutlinedIcon, for: .normal)
+        button.addTarget(self, action: #selector(popToRootViewButtonTapped), for: .touchUpInside)
+        
+        return button
+    }()
     private let countdownHeaderLabel: YourManitoLabel = .init(font: .font(.heading_2), color: .main_black)
     private let roomCodeLabel: YourManitoLabel = .init(font: .font(.heading_4), color: .main_black)
     private let roomCodeDescribeLabel: YourManitoLabel = .init(font: .font(.subtitle_1), color: .gray1)
@@ -77,7 +85,13 @@ final class RoomCompletionViewController: UIViewController {
     
     private func setlayout() {
         
-        self.view.addSubviews(countdownHeaderLabel, roomCodeLabel, roomCodeDescribeLabel, roomCodeView, roomCodeTitleLabel, copyIconImageView, confirmButton)
+        self.view.addSubviews(popToRootViewButton, countdownHeaderLabel, roomCodeLabel, roomCodeDescribeLabel, roomCodeView, roomCodeTitleLabel, copyIconImageView, confirmButton)
+        
+        popToRootViewButton.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            $0.trailing.equalToSuperview().inset(10)
+            $0.size.equalTo(44)
+        }
         
         countdownHeaderLabel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(107)
@@ -157,5 +171,9 @@ final class RoomCompletionViewController: UIViewController {
         // 공유하기 기능 중 제외할 기능이 있을 때 사용
 //        activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
         self.present(activityVC, animated: true, completion: nil)
+    }
+    
+    @objc func popToRootViewButtonTapped() {
+        self.navigationController?.popToRootViewController(animated: true)
     }
 }
