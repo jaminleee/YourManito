@@ -10,6 +10,9 @@ import UIKit
 class YourManitoAlertView: UIView {
     static let identifier: String = "YourManitoAlertView"
     
+    var cancelAction: (() -> Void)?
+    var confirmAction: (() -> Void)?
+    
     private let alertView: UIView = {
         let view = UIView()
         view.backgroundColor = .main_white
@@ -91,6 +94,19 @@ class YourManitoAlertView: UIView {
         }
     
         buttonStackVIew.addArrangedSubviews(cancelButton, confirmButton)
+    }
+    
+    private func setupActions() {
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        confirmButton.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func cancelButtonTapped() {
+        cancelAction?()
+    }
+    
+    @objc private func confirmButtonTapped() {
+        confirmAction?()
     }
     
     func configure(image: UIImage?, title: String?, subtitle: String?, cancelTitle: String?, confirmTitle: String?) {

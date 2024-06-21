@@ -15,11 +15,30 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        let navigationController = UINavigationController(rootViewController: MakeRoomViewController())
-        navigationController.setNavigationBarHidden(true, animated: false)
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = navigationController
+        
+        // Check if the user is already logged in
+        if UserDefaults.standard.bool(forKey: "isLoggedIn") {
+            setHomeAsRootViewController()
+        } else {
+            setLoginAsRootViewController()
+        }
+
         window?.makeKeyAndVisible()
+    }
+    
+    func setLoginAsRootViewController() {
+        let loginViewController = LoginViewController()
+        let navigationController = UINavigationController(rootViewController: loginViewController)
+        navigationController.setNavigationBarHidden(true, animated: false)
+        window?.rootViewController = navigationController
+    }
+
+    func setHomeAsRootViewController() {
+        let homeViewController = HomeViewController()
+        let navigationController = UINavigationController(rootViewController: homeViewController)
+        navigationController.setNavigationBarHidden(true, animated: false)
+        window?.rootViewController = navigationController
         
     }
 }

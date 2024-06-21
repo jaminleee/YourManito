@@ -6,3 +6,10 @@
 //
 
 import Foundation
+import UIKit
+
+extension UIDevice {
+    var deviceUUID: String {
+        return identifierForVendor?.uuidString ?? "unknown"
+    }
+}

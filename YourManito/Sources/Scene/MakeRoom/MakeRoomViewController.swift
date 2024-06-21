@@ -116,7 +116,6 @@ final class MakeRoomViewController: UIViewController {
         roomNamedescribeLabel.text = "최대 15자"
         endDateLabel.text = "종료일"
         endDatedescribeLabel.text = "최대 99일"
-        
     }
     
     private func setLayout() {

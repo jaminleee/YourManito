@@ -9,6 +9,8 @@ import UIKit
 import SnapKit
 
 final class RoomCompletionViewController: UIViewController {
+    static let identifier: String = "RoomCompletionViewController"
+    
     var daysLeft: Int = 0
     let roomCode: String = "roomdCode"
     
@@ -175,5 +177,10 @@ final class RoomCompletionViewController: UIViewController {
     
     @objc func popToRootViewButtonTapped() {
         self.navigationController?.popToRootViewController(animated: true)
+    }
+    
+    @objc private func confirmButtonTapped() {
+        let roomCompletionViewController = RoomCompletionViewController()
+        navigationController?.pushViewController(roomCompletionViewController, animated: true)
     }
 }
