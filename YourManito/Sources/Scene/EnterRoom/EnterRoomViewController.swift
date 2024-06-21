@@ -13,6 +13,8 @@ final class EnterRoomViewController: UIViewController {
     let selectedBorderColor = UIColor.primary.cgColor
     let defaultBorderColor = UIColor.gray3.cgColor
     
+    lazy var navigationVarView = YourManitoNavigationBarView(self)
+    
     private let enterRoomLabel: YourManitoLabel = .init(font: .font(.heading_2), color: .main_black)
     private let describeLabel: YourManitoLabel = .init(font: .font(.heading_6), color: .gray1)
     
@@ -44,12 +46,13 @@ final class EnterRoomViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setStyle()
         setLayout()
         
         roomCodeTextField.addTarget(self, action: #selector(textFieldDidBeginEditing(_:)), for: .editingDidBegin)
         roomCodeTextField.addTarget(self, action: #selector(textFieldDidEndEditing(_:)), for: .editingDidEnd)
+        confirmButton.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)
         
     }
     private func setStyle() {
@@ -63,10 +66,16 @@ final class EnterRoomViewController: UIViewController {
     }
     
     private func setLayout() {
-        self.view.addSubviews(enterRoomLabel, describeLabel, backgroundView, roomCodeLabel, roomCodedescribeLabel, roomCodeTextField, confirmButton)
+        self.view.addSubviews(navigationVarView, enterRoomLabel, describeLabel, backgroundView, roomCodeLabel, roomCodedescribeLabel, roomCodeTextField, confirmButton)
+        
+        navigationVarView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(26)
+            $0.trailing.leading.equalToSuperview()
+            $0.height.equalTo(40)
+        }
         
         enterRoomLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(107)
+            $0.top.equalTo(navigationVarView.snp.bottom).offset(41)
             $0.leading.equalToSuperview().inset(20)
         }
         
@@ -101,6 +110,11 @@ final class EnterRoomViewController: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
             $0.height.equalTo(64)
         }
+    }
+    
+    @objc private func confirmButtonTapped() {
+        let joinRoomViewController = JoinRoomViewController()
+        navigationController?.pushViewController(joinRoomViewController, animated: true)
     }
 
     //키보드 내리기

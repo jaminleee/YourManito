@@ -20,23 +20,54 @@ final class HomeViewController: UIViewController {
     }()
     
     private let makeRoomButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .sub2
-        button.makeCornerRound(radius: 24)
-        button.setTitle("방 만들기", for: .normal)
-        button.titleLabel?.font = UIFont.font(.heading_5)
-        button.setTitleColor(.main_black, for: .normal)
+//        var button = UIButton()
+//        button.backgroundColor = .sub2
+//        button.makeCornerRound(radius: 24)
+//        //button.setTitle("방 만들기", for: .normal)
+//        button.titleLabel?.font = UIFont.font(.heading_5)
+//        button.setTitleColor(.main_black, for: .normal)
+//        button.setImage(.makeRoom, for: .normal)
+//    
+//        button.contentVerticalAlignment = .center
+        
+        var config = UIButton.Configuration.tinted()
+        var titleAttr = AttributedString.init("방 만들기")
+        titleAttr.font = UIFont.font(.heading_5)
+        config.attributedTitle = titleAttr
+        config.image = .makeRoom
+        config.imagePlacement = .top
+        config.imagePadding = 10
+        config.background.cornerRadius = 24
+        config.baseBackgroundColor = .sub1
+        config.baseForegroundColor = .main_black
+        
+        let button = UIButton(configuration: config,
+                                primaryAction: nil)
         return button
     }()
 
 
     private let joinRoomButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .sub2
-        button.makeCornerRound(radius: 24)
-        button.setTitle("방 입장하기", for: .normal)
-        button.titleLabel?.font = UIFont.font(.heading_5)
-        button.setTitleColor(.main_black, for: .normal)
+//        let button = UIButton()
+//        button.backgroundColor = .sub2
+//        button.makeCornerRound(radius: 24)
+//        button.setTitle("방 입장하기", for: .normal)
+//        button.titleLabel?.font = UIFont.font(.heading_5)
+//        button.setTitleColor(.main_black, for: .normal)
+        
+        var config = UIButton.Configuration.tinted()
+        var titleAttr = AttributedString.init("방 입장하기")
+        titleAttr.font = UIFont.font(.heading_5)
+        config.attributedTitle = titleAttr
+        config.image = .shareRoom
+        config.imagePlacement = .top
+        config.imagePadding = 10
+        config.background.cornerRadius = 24
+        config.baseBackgroundColor = .gray3
+        config.baseForegroundColor = .main_black
+        
+        let button = UIButton(configuration: config,
+                                primaryAction: nil)
         
         return button
     }()
@@ -83,6 +114,7 @@ final class HomeViewController: UIViewController {
         roomListLabel.text = "나만의 마니또"
         
         makeRoomButton.addTarget(self, action: #selector(makeRoomButtonTapped), for: .touchUpInside)
+        joinRoomButton.addTarget(self, action: #selector(joinRoomButtonTapped), for: .touchUpInside)
         //navigationController?.isNavigationBarHidden = true
     }
     
@@ -129,6 +161,11 @@ final class HomeViewController: UIViewController {
     @objc private func makeRoomButtonTapped() {
         let makeRoomViewController = MakeRoomViewController()
         navigationController?.pushViewController(makeRoomViewController, animated: true)
+    }
+    
+    @objc private func joinRoomButtonTapped() {
+        let enterRoomViewController = EnterRoomViewController()
+        navigationController?.pushViewController(enterRoomViewController, animated: true)
     }
 
     

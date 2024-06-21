@@ -9,10 +9,14 @@ import UIKit
 
 final class JoinRoomViewController: UIViewController {
     static let identifier: String = "JoinRoomViewController"
+    lazy var navigationVarView = YourManitoNavigationBarView(self)
+    
     
     let roomCode: String = "roomdCode"
     let totalMembers: Int = 0
+    
     private let joinRoomTitleLabel: YourManitoLabel = .init(font: .font(.heading_2), color: .main_black)
+    
     private let roomCodeView: UIView = {
        let view = UIView()
         view.backgroundColor = .main_white
@@ -81,6 +85,8 @@ final class JoinRoomViewController: UIViewController {
         let tapShareGesture = UITapGestureRecognizer(target: self, action: #selector(shareRoomCode))
         shareImageView.isUserInteractionEnabled = true
         shareImageView.addGestureRecognizer(tapShareGesture)
+        
+        confirmButton.addTarget(self, action: #selector(presentConfirmBottomSheet), for: .touchUpInside)
 
     }
     
@@ -94,10 +100,17 @@ final class JoinRoomViewController: UIViewController {
     }
     
     private func setlayout() {
-        self.view.addSubviews(joinRoomTitleLabel, roomCodeView, roomCodeLabel, copyImageView, shareImageView, backgroundView, totalMembersLabel, describeLabel, confirmButton, membersCollectionView)
+        self.view.addSubviews(navigationVarView,joinRoomTitleLabel, roomCodeView, roomCodeLabel, copyImageView, shareImageView, backgroundView, totalMembersLabel, describeLabel, confirmButton, membersCollectionView)
+        
+        
+        navigationVarView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(26)
+            $0.trailing.leading.equalToSuperview()
+            $0.height.equalTo(40)
+        }
         
         joinRoomTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(107)
+            $0.top.equalTo(navigationVarView.snp.bottom).offset(41)
             $0.leading.equalToSuperview().inset(20)
         }
         
@@ -153,6 +166,10 @@ final class JoinRoomViewController: UIViewController {
         }
     }
     
+    @objc private func confirmButtonTapped() {
+        let joinRoomViewController = JoinRoomViewController()
+        navigationController?.pushViewController(joinRoomViewController, animated: true)
+    }
 
     
     @objc func presentBottomSheet() {
@@ -161,7 +178,48 @@ final class JoinRoomViewController: UIViewController {
         dimView.tag = 1
         
         let alertView = YourManitoAlertView()
-        alertView.configure(image: .copyGray, title: "삭제할까요?", subtitle: "누르면 삭제됩니다", cancelTitle: "아니오", confirmTitle: "삭제")
+        alertView.configure(image: .imgTrash, title: "삭제할까요?", subtitle: "지금 삭제해도 다시 초대할 수 있어요!", cancelTitle: "아니오", confirmTitle: "삭제")
+        self.view.addSubviews(dimView, alertView)
+        dimView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        alertView.tag = 2
+        
+        alertView.transform = CGAffineTransform(translationX: 0, y: alertView.frame.height)
+        UIView.animate(withDuration: 3, animations: {
+            alertView.transform = .identity
+        })
+        
+        alertView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalToSuperview().multipliedBy(0.38)
+        }
+        
+        alertView.cancelAction = {
+            // Handle cancel action
+            alertView.removeFromSuperview()
+            print("삭제 취소")
+        }
+        
+        alertView.confirmAction = {
+            // Handle confirm action
+            // Add your logic here
+            alertView.removeFromSuperview()
+            print("삭제 확인")
+        }
+
+        // Dismiss the alert when tapping outside the alert view
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissCustomAlert))
+        dimView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func presentConfirmBottomSheet() {
+        let dimView = UIView()
+        dimView.backgroundColor = UIColor.main_black.withAlphaComponent(0.3)
+        dimView.tag = 1
+        
+        let alertView = YourManitoAlertView()
+        alertView.configure(image: .imgCheck, title: "이대로 방을 확정할까요??", subtitle: "확정하면 방 수정 및 삭제가 불가능합니다", cancelTitle: "취소", confirmTitle: "확정")
         self.view.addSubviews(dimView, alertView)
         dimView.snp.makeConstraints {
             $0.edges.equalToSuperview()
